@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="exam/_06_websocket_client/**" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="libs/gson-2.8.6.jar"/>
 	<classpathentry kind="lib" path="libs/jetty-client-9.4.51.v20230217.jar"/>

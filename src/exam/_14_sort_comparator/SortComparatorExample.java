@@ -29,7 +29,7 @@ public class SortComparatorExample {
             @Override
             public int compare(Person a, Person b) {
                 if (a.age != b.age) {
-                    return a.age - b.age;
+                    return Integer.compare(a.age, b.age);
                 }
                 return a.name.compareTo(b.name);
             }
@@ -49,9 +49,9 @@ public class SortComparatorExample {
             @Override
             public int compare(int[] a, int[] b) {
                 if (a[0] != b[0]) {
-                    return a[0] - b[0];
+                    return Integer.compare(a[0], b[0]);
                 }
-                return a[1] - b[1];
+                return Integer.compare(a[1], b[1]);
             }
         });
 

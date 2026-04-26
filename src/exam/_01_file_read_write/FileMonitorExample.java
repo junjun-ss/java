@@ -1,34 +1,44 @@
 package exam._01_file_read_write;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 public class FileMonitorExample {
+    private static final String SAMPLE_FILE = "src/exam/_01_file_read_write/input.txt";
+
     public static void main(String[] args) {
-        startMonitoring("monitoring.txt");
+        startMonitoring(SAMPLE_FILE);
     }
 
     public static void startMonitoring(String fileName) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            long lastModified = System.currentTimeMillis();
+        File targetFile = new File(fileName);
+        if (!targetFile.exists()) {
+            System.out.println("파일이 없습니다: " + fileName);
+            return;
+        }
 
+        try (RandomAccessFile reader = new RandomAccessFile(targetFile, "r")) {
+            long lastModified = targetFile.lastModified();
+            long lastPointer = targetFile.length();
+
+            System.out.println("파일 변경 감시 시작: " + fileName);
             while (true) {
-                if (reader.ready()) {
-                    while ((line = reader.readLine()) != null) {
-                        System.out.println(line);
-                    }
-                }
-
                 long currentModified = getLastModified(fileName);
                 if (currentModified > lastModified) {
                     lastModified = currentModified;
+                    reader.seek(lastPointer);
+
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        System.out.println(line);
+                    }
+
+                    lastPointer = reader.getFilePointer();
                     System.out.println("새로운 데이터가 추가되었습니다.");
                 }
 
-                Thread.sleep(100);
+                Thread.sleep(500);
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

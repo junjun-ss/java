@@ -1,6 +1,8 @@
 package exam._08_message_queue;
 
 public class MessageQueueExample {
+    private static final String POISON_PILL = "DONE";
+
     public static void main(String[] args) {
         MessageQueue messageQueue = new MessageQueue();
 
@@ -16,6 +18,7 @@ public class MessageQueueExample {
                     e.printStackTrace();
                 }
             }
+            messageQueue.enqueue(POISON_PILL);
         });
 
         // Consumer 스레드
@@ -23,6 +26,11 @@ public class MessageQueueExample {
             try {
                 while (true) {
                     String message = messageQueue.dequeue();
+                    if (POISON_PILL.equals(message)) {
+                        System.out.println("Consumer 종료");
+                        break;
+                    }
+
                     System.out.println("Consumed: " + message);
                     Thread.sleep(2000); // 일부러 속도를 늦춤
                 }

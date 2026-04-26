@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class DijkstraExample {
-    private static final int INF = 1_000_000_000;
+    private static final long INF = Long.MAX_VALUE / 4;
 
     public static void main(String[] args) {
         List<Edge>[] graph = new ArrayList[6];
@@ -14,23 +14,23 @@ public class DijkstraExample {
             graph[i] = new ArrayList<>();
         }
 
-        addEdge(graph, 1, 2, 2);
-        addEdge(graph, 1, 3, 5);
-        addEdge(graph, 2, 3, 1);
-        addEdge(graph, 2, 4, 2);
-        addEdge(graph, 3, 5, 3);
-        addEdge(graph, 4, 5, 1);
+        addEdge(graph, 1, 2, 2L);
+        addEdge(graph, 1, 3, 5L);
+        addEdge(graph, 2, 3, 1L);
+        addEdge(graph, 2, 4, 2L);
+        addEdge(graph, 3, 5, 3L);
+        addEdge(graph, 4, 5, 1L);
 
-        int[] dist = dijkstra(graph, 1);
+        long[] dist = dijkstra(graph, 1);
         System.out.println(Arrays.toString(dist));
     }
 
-    private static void addEdge(List<Edge>[] graph, int from, int to, int cost) {
+    private static void addEdge(List<Edge>[] graph, int from, int to, long cost) {
         graph[from].add(new Edge(to, cost));
     }
 
-    private static int[] dijkstra(List<Edge>[] graph, int start) {
-        int[] dist = new int[graph.length];
+    private static long[] dijkstra(List<Edge>[] graph, int start) {
+        long[] dist = new long[graph.length];
         Arrays.fill(dist, INF);
 
         PriorityQueue<Node> pq = new PriorityQueue<>();
@@ -45,7 +45,7 @@ public class DijkstraExample {
             }
 
             for (Edge edge : graph[current.vertex]) {
-                int nextCost = current.cost + edge.cost;
+                long nextCost = current.cost + edge.cost;
 
                 if (nextCost < dist[edge.to]) {
                     dist[edge.to] = nextCost;
@@ -59,9 +59,9 @@ public class DijkstraExample {
 
     static class Edge {
         int to;
-        int cost;
+        long cost;
 
-        Edge(int to, int cost) {
+        Edge(int to, long cost) {
             this.to = to;
             this.cost = cost;
         }
@@ -69,16 +69,16 @@ public class DijkstraExample {
 
     static class Node implements Comparable<Node> {
         int vertex;
-        int cost;
+        long cost;
 
-        Node(int vertex, int cost) {
+        Node(int vertex, long cost) {
             this.vertex = vertex;
             this.cost = cost;
         }
 
         @Override
         public int compareTo(Node other) {
-            return this.cost - other.cost;
+            return Long.compare(this.cost, other.cost);
         }
     }
 }

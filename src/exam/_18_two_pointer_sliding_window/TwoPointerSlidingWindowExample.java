@@ -6,12 +6,14 @@ import java.util.Map;
 public class TwoPointerSlidingWindowExample {
     public static void main(String[] args) {
         int[] arr = {1, 2, 3, 2, 5};
-        System.out.println(countSubarraySum(arr, 5));
+        System.out.println(countPositiveSubarraySum(arr, 5));
         System.out.println(minLengthAtLeast(arr, 7));
         System.out.println(longestSubstringWithoutDuplicate("abcaabcd"));
+        System.out.println(countSubarraySumWithNegatives(new int[] {1, -1, 2, 3, -2}, 3));
     }
 
-    private static int countSubarraySum(int[] arr, int target) {
+    // 모든 원소가 0 이상일 때만 쓸 수 있는 투포인터 방식입니다.
+    private static int countPositiveSubarraySum(int[] arr, int target) {
         int left = 0;
         int sum = 0;
         int count = 0;
@@ -26,6 +28,22 @@ public class TwoPointerSlidingWindowExample {
             if (sum == target) {
                 count++;
             }
+        }
+
+        return count;
+    }
+
+    // 음수가 섞일 수 있으면 prefix sum + HashMap 방식을 사용합니다.
+    private static int countSubarraySumWithNegatives(int[] arr, int target) {
+        Map<Integer, Integer> prefixCount = new HashMap<>();
+        prefixCount.put(0, 1);
+
+        int sum = 0;
+        int count = 0;
+        for (int value : arr) {
+            sum += value;
+            count += prefixCount.getOrDefault(sum - target, 0);
+            prefixCount.put(sum, prefixCount.getOrDefault(sum, 0) + 1);
         }
 
         return count;

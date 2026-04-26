@@ -53,10 +53,10 @@ mvn compile
 Maven 없이 `libs/`의 jar를 직접 쓰면:
 
 ```bash
-find src -name "*.java" -print | xargs javac -cp "libs/*" -d bin
+find src -name "*.java" ! -path "*/_06_websocket_client/*" -print | xargs javac -cp "libs/*" -d bin
 ```
 
-단, WebSocket 예제는 `javax.websocket` 구현체가 필요해서 Maven 사용을 추천합니다.
+단, `libs/`에는 WebSocket API/구현체 jar가 없으므로 WebSocket 예제까지 컴파일하려면 Maven을 쓰거나 관련 jar를 추가해야 합니다.
 
 예제 실행:
 
