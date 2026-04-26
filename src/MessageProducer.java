@@ -1,8 +1,9 @@
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Producer {
+public class MessageProducer {
     private static final String QUEUE_URL = "http://localhost:8080/queue"; // 메시지 큐의 URL 입력
 
     public static void main(String[] args) {
@@ -18,7 +19,7 @@ public class Producer {
             conn.setDoOutput(true);
 
             // 메시지를 POST 요청의 body에 포함하여 전송
-            conn.getOutputStream().write(message.getBytes());
+            conn.getOutputStream().write(message.getBytes(StandardCharsets.UTF_8));
 
             int responseCode = conn.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {

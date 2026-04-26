@@ -4,14 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 public class ChildProcessSysout {
+    private static final String JAVA_CLASSPATH = System.getProperty("java.class.path");
+
     public static void main(String[] args) {
         while (true) {
-            ProcessBuilder processBuilder = new ProcessBuilder("java", "ChildProcess");
+            ProcessBuilder processBuilder = new ProcessBuilder("java", "-cp", JAVA_CLASSPATH, "multiProcessKill.ChildProcess");
             try {
                 Process process = processBuilder.start();
 

@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -8,8 +9,7 @@ public class FileMonitor {
     }
 
     public static void startMonitoring(String fileName) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             long lastModified = System.currentTimeMillis();
 
@@ -20,14 +20,13 @@ public class FileMonitor {
                     }
                 }
 
-                // 파일의 마지막 수정 시간을 확인하여 새로운 데이터가 추가되었는지 확인
                 long currentModified = getLastModified(fileName);
                 if (currentModified > lastModified) {
                     lastModified = currentModified;
                     System.out.println("새로운 데이터가 추가되었습니다.");
                 }
 
-                Thread.sleep(100); // 0.1초 대기
+                Thread.sleep(100);
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

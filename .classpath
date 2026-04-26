@@ -2,15 +2,15 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/USER/Desktop/tct/java/libs/gson-2.8.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/USER/Desktop/tct/java/libs/jetty-client-9.4.51.v20230217.jar"/>
-	<classpathentry kind="lib" path="C:/Users/USER/Desktop/tct/java/libs/jetty-http-9.4.51.v20230217.jar"/>
-	<classpathentry kind="lib" path="C:/Users/USER/Desktop/tct/java/libs/jetty-io-9.4.51.v20230217.jar"/>
-	<classpathentry kind="lib" path="C:/Users/USER/Desktop/tct/java/libs/jetty-security-9.4.51.v20230217.jar"/>
-	<classpathentry kind="lib" path="C:/Users/USER/Desktop/tct/java/libs/jetty-server-9.4.51.v20230217.jar"/>
-	<classpathentry kind="lib" path="C:/Users/USER/Desktop/tct/java/libs/jetty-servlet-9.4.51.v20230217.jar"/>
-	<classpathentry kind="lib" path="C:/Users/USER/Desktop/tct/java/libs/jetty-util-9.4.51.v20230217.jar"/>
-	<classpathentry kind="lib" path="C:/Users/USER/Desktop/tct/java/libs/jetty-util-ajax-9.4.51.v20230217.jar"/>
-	<classpathentry kind="lib" path="C:/Users/USER/Desktop/tct/java/libs/servlet-api-3.1.jar"/>
+	<classpathentry kind="lib" path="libs/gson-2.8.6.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-client-9.4.51.v20230217.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-http-9.4.51.v20230217.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-io-9.4.51.v20230217.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-security-9.4.51.v20230217.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-server-9.4.51.v20230217.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-servlet-9.4.51.v20230217.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-util-9.4.51.v20230217.jar"/>
+	<classpathentry kind="lib" path="libs/jetty-util-ajax-9.4.51.v20230217.jar"/>
+	<classpathentry kind="lib" path="libs/servlet-api-3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

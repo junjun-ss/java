@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Consumer {
+public class MessageConsumer {
     private static final String QUEUE_URL = "http://localhost:8080/queue"; // 메시지 큐의 URL 입력
 
     public static void main(String[] args) {

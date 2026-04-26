@@ -1,0 +1,13 @@
+# Build outputs
+bin/
+target/
+out/
+
+# IDE / OS noise
+.settings/
+.idea/
+*.iml
+.DS_Store
+
+# Logs
+*.log
