@@ -1,62 +1,61 @@
 # Java Exam Examples
 
-회사 Java 시험에서 자주 나오는 기능을 빠르게 찾아 복붙하기 위한 예제 모음입니다.
-완성 서비스가 아니라, 파일 IO, JSON/Gson, HTTP, WebSocket, Thread, Process 같은 작은 예제를 주제별로 모아둔 저장소입니다.
+회사 Java 시험에서 자주 나오는 유형을 폴더명만 보고 바로 찾아 쓰기 위한 예제 모음입니다.
+문제가 나오면 아래 표에서 키워드를 찾고, 해당 폴더로 들어가 필요한 `.java` 파일을 복사해서 쓰면 됩니다.
 
-## 빠른 사용법
+## 문제 나오면 여기로
 
-1. 시험 주제에 맞는 예제를 아래 표나 [docs/EXAM_CHEATSHEET.md](docs/EXAM_CHEATSHEET.md)에서 찾습니다.
-2. 필요한 클래스 또는 메서드만 시험 코드로 가져갑니다.
-3. Gson/Jetty/WebSocket처럼 외부 라이브러리가 필요한 예제는 `libs/` 또는 `pom.xml` 의존성을 같이 확인합니다.
-
-## 예제 인덱스
-
-| 주제 | 파일 | 내용 |
+| 시험 문제 키워드 | 들어갈 폴더 | 대표 파일 |
 | --- | --- | --- |
-| 파일 읽기/쓰기 | `src/FileIO/fileInput.java` | 텍스트 파일 읽기, 라인 파싱, 파일 쓰기 |
-| JSON 파일 읽기 | `src/FileIO/fileInput.java` | `person.json`을 Gson으로 POJO 변환 |
-| 문자열/JSON 변환 | `src/DataCasting/dataCasting.java` | String, JsonObject, POJO, List 변환 |
-| HTTP 클라이언트 | `src/HttpMaker/HttpSender.java` | Jetty `HttpClient`로 GET/POST 요청 |
-| HTTP 서버 | `src/HttpMaker/HttpReceiver.java` | Jetty 서버에서 query/body 받기 |
-| 비동기 HTTP 서버 | `src/AsyncHttp/AsyncHttpServerExample.java` | Jetty async request 처리 |
-| HTTP polling | `src/HttpPolling.java` | 주기적으로 URL polling |
-| 메시지 큐 | `src/MessageQueue/MessageQueue.java` | `wait/notifyAll` 기반 간단 큐 |
-| HTTP producer/consumer | `src/MessageProducer.java`, `src/MessageConsumer.java` | `HttpURLConnection` GET/POST 예제 |
-| WebSocket client | `src/WebSocketClient.java` | `javax.websocket` client endpoint |
-| TCP streaming server | `src/RealTime/RealTimeStreamingServer.java` | `ServerSocket` 기반 실시간 수신 |
-| Thread | `src/threadAsync/MyThread.java` | 기본 Thread 실행 |
-| CompletableFuture | `src/MultiProcessThread/AsyncLogic.java` | `CompletableFuture.runAsync` 예제 |
-| ProcessBuilder | `src/threadAsync/MyProcess.java` | Java 프로세스 실행 예제 |
-| AES 암호화 | `src/ecrypt/AESEncryptionExample.java` | AES encrypt/decrypt 기본 흐름 |
-| 사용자 입력 | `src/UserInput/userInput.java` | `Scanner` 입력 예제 |
+| 파일 읽기, 파일 쓰기, 라인 파싱 | `src/exam/_01_file_read_write` | `FileReadWriteExample.java` |
+| 파일 변경 감지, polling | `src/exam/_01_file_read_write` | `FileMonitorExample.java` |
+| JSON 파일 읽기, Gson, POJO 변환 | `src/exam/_02_json_gson` | `GsonCastingExample.java` |
+| `HttpURLConnection`, GET, POST, polling | `src/exam/_03_http_urlconnection` | `MessageProducer.java`, `MessageConsumer.java` |
+| Jetty HTTP 서버/클라이언트 | `src/exam/_04_http_jetty` | `HttpJettyExample.java` |
+| 비동기 HTTP 서버, 동시 요청 | `src/exam/_05_http_async_jetty` | `AsyncHttpServerExample.java` |
+| WebSocket 클라이언트 | `src/exam/_06_websocket_client` | `WebSocketClient.java` |
+| TCP socket server, 실시간 수신 | `src/exam/_07_socket_server` | `RealTimeStreamingServer.java` |
+| 메시지 큐, `wait`, `notifyAll` | `src/exam/_08_message_queue` | `MessageQueueExample.java` |
+| Thread, CompletableFuture, pipe | `src/exam/_09_thread_async` | `CompletableFutureExample.java` |
+| ProcessBuilder, 자식 프로세스 실행/재시작 | `src/exam/_10_process_builder` | `ProcessExample.java` |
+| AES 암호화/복호화 | `src/exam/_11_encryption_aes` | `AESEncryptionExample.java` |
+| Scanner 사용자 입력 | `src/exam/_12_user_input` | `UserInputExample.java` |
+| AI 모델 skeleton | `src/exam/_90_ai_model_stub` | `Predictor.java` |
 
-더 자세한 카테고리는 [src/README.md](src/README.md)를 참고하세요.
+## 추천 사용 흐름
+
+1. 문제에서 핵심 키워드를 찾습니다. 예: `json 파일 읽기`, `websocket`, `thread`.
+2. 위 표의 폴더로 들어갑니다.
+3. 폴더 안 `README.md`를 먼저 보고, 대표 `.java` 파일을 복사합니다.
+4. 필요한 메서드만 시험 코드에 붙여 넣고 파일 경로, URL, port만 바꿉니다.
 
 ## 빌드/실행
 
-이 저장소는 Eclipse 프로젝트로도 열 수 있고, Maven으로도 의존성을 받을 수 있게 `pom.xml`을 추가해두었습니다.
+Maven이 있으면:
 
 ```bash
-# Maven이 있는 경우
 mvn compile
-
-# Maven 없이 libs 폴더의 jar를 직접 쓰는 경우
-javac -cp "libs/*" -d bin src/**/*.java src/*.java
 ```
 
-패키지가 있는 예제는 실행할 때 패키지명을 포함해야 합니다.
+Maven 없이 `libs/`의 jar를 직접 쓰면:
 
 ```bash
-java -cp "bin:libs/*" FileIO.fileInput
-java -cp "bin:libs/*" DataCasting.dataCasting
-java -cp "bin:libs/*" AsyncHttp.AsyncHttpServerExample
+find src -name "*.java" -print | xargs javac -cp "libs/*" -d bin
+```
+
+단, WebSocket 예제는 `javax.websocket` 구현체가 필요해서 Maven 사용을 추천합니다.
+
+예제 실행:
+
+```bash
+java -cp "bin:libs/*" exam._01_file_read_write.FileReadWriteExample
+java -cp "bin:libs/*" exam._02_json_gson.GsonCastingExample
+java -cp "bin:libs/*" exam._04_http_jetty.HttpJettyExample
 ```
 
 Windows에서는 classpath 구분자를 `:` 대신 `;`로 바꿔주세요.
 
-## 정리 원칙
+## 보조 문서
 
-- 시험장에서 바로 가져갈 수 있도록 예제는 작게 유지합니다.
-- 한 파일은 한 주제를 보여주는 데 집중합니다.
-- 외부 의존성이 필요한 예제는 README에 표시합니다.
-- 새 예제를 추가할 때는 `src/README.md`와 이 README 인덱스도 같이 갱신합니다.
+- [docs/EXAM_CHEATSHEET.md](docs/EXAM_CHEATSHEET.md): 시험장에서 복붙하기 좋은 짧은 코드 조각
+- [src/exam/README.md](src/exam/README.md): 전체 예제 폴더맵

@@ -1,14 +1,17 @@
 # Exam Cheatsheet
 
-시험장에서 자주 가져다 쓰는 패턴만 짧게 모은 문서입니다. 자세한 전체 예제는 각 소스 파일을 보세요.
+시험장에서 바로 복붙하기 좋은 짧은 패턴만 모았습니다.
+전체 실행 예제는 `src/exam/_번호_문제유형` 폴더 안의 `.java` 파일을 보면 됩니다.
 
 ## File IO
 
-텍스트 파일 라인 단위 읽기: `src/FileIO/fileInput.java`
+폴더: `src/exam/_01_file_read_write`
+
+텍스트 파일 라인 단위 읽기:
 
 ```java
 List<String> lines = new ArrayList<>();
-try (BufferedReader br = new BufferedReader(new FileReader("./input.txt"))) {
+try (BufferedReader br = new BufferedReader(new FileReader("input.txt"))) {
     String line;
     while ((line = br.readLine()) != null) {
         lines.add(line);
@@ -19,7 +22,7 @@ try (BufferedReader br = new BufferedReader(new FileReader("./input.txt"))) {
 텍스트 파일 쓰기:
 
 ```java
-try (BufferedWriter bw = new BufferedWriter(new FileWriter("./output.txt"))) {
+try (BufferedWriter bw = new BufferedWriter(new FileWriter("output.txt"))) {
     for (String line : lines) {
         bw.write(line);
         bw.newLine();
@@ -27,9 +30,11 @@ try (BufferedWriter bw = new BufferedWriter(new FileWriter("./output.txt"))) {
 }
 ```
 
-## Gson
+## JSON / Gson
 
-문자열을 POJO로 변환: `src/DataCasting/dataCasting.java`
+폴더: `src/exam/_02_json_gson`
+
+문자열을 POJO로 변환:
 
 ```java
 Gson gson = new Gson();
@@ -43,17 +48,19 @@ Type listType = new TypeToken<List<Person>>() {}.getType();
 List<Person> people = gson.fromJson(jsonArrayString, listType);
 ```
 
-파일 JSON 읽기: `src/FileIO/fileInput.java`
+JSON 파일 읽기:
 
 ```java
-try (BufferedReader reader = new BufferedReader(new FileReader("./person.json"))) {
+try (BufferedReader reader = new BufferedReader(new FileReader("person.json"))) {
     Person person = new Gson().fromJson(reader, Person.class);
 }
 ```
 
-## HTTP
+## HTTP URLConnection
 
-기본 POST 요청: `src/MessageProducer.java`
+폴더: `src/exam/_03_http_urlconnection`
+
+기본 POST 요청:
 
 ```java
 URL url = new URL("http://localhost:8080/queue");
@@ -65,7 +72,7 @@ int responseCode = conn.getResponseCode();
 conn.disconnect();
 ```
 
-기본 GET 요청: `src/MessageConsumer.java`
+기본 GET 요청:
 
 ```java
 URL url = new URL("http://localhost:8080/queue");
@@ -77,11 +84,31 @@ try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputS
 conn.disconnect();
 ```
 
-Jetty server/client 예제는 `src/HttpMaker`와 `src/AsyncHttp` 아래에 있습니다.
+## Jetty HTTP
+
+폴더:
+
+```text
+src/exam/_04_http_jetty
+src/exam/_05_http_async_jetty
+```
+
+서버 handler 핵심:
+
+```java
+public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
+        throws IOException, ServletException {
+    response.setStatus(HttpServletResponse.SC_OK);
+    baseRequest.setHandled(true);
+    response.getWriter().println(request.getQueryString());
+}
+```
 
 ## Thread / Async
 
-Thread 직접 실행: `src/threadAsync/MyThread.java`
+폴더: `src/exam/_09_thread_async`
+
+Thread 직접 실행:
 
 ```java
 Thread thread = new Thread(() -> System.out.println("work"));
@@ -89,7 +116,7 @@ thread.start();
 thread.join();
 ```
 
-CompletableFuture 병렬 실행: `src/MultiProcessThread/AsyncLogic.java`
+CompletableFuture 병렬 실행:
 
 ```java
 ExecutorService executor = Executors.newFixedThreadPool(2);
@@ -102,24 +129,24 @@ executor.shutdown();
 
 ## ProcessBuilder
 
+폴더: `src/exam/_10_process_builder`
+
 패키지가 있는 클래스를 실행할 때는 classpath와 전체 클래스명을 같이 넘깁니다.
 
 ```java
 ProcessBuilder pb = new ProcessBuilder(
     "java",
     "-cp",
-    "bin:libs/*",
-    "threadAsync.MyThread"
+    System.getProperty("java.class.path"),
+    "exam._09_thread_async.MyThread"
 );
 Process process = pb.inheritIO().start();
 int exitCode = process.waitFor();
 ```
 
-Windows에서는 `bin:libs/*` 대신 `bin;libs/*`를 사용합니다.
-
 ## WebSocket
 
-WebSocket 클라이언트 endpoint 예제는 `src/WebSocketClient.java`에 있습니다.
+폴더: `src/exam/_06_websocket_client`
 
 ```java
 @ClientEndpoint
