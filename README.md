@@ -7,6 +7,7 @@
 
 | 시험 문제 키워드 | 들어갈 폴더 | 대표 파일 |
 | --- | --- | --- |
+| 빠른 입력, 빠른 출력, `StringTokenizer` | `src/exam/_00_fast_io` | `FastIOExample.java` |
 | 파일 읽기, 파일 쓰기, 라인 파싱 | `src/exam/_01_file_read_write` | `FileReadWriteExample.java` |
 | 파일 변경 감지, polling | `src/exam/_01_file_read_write` | `FileMonitorExample.java` |
 | JSON 파일 읽기, Gson, POJO 변환 | `src/exam/_02_json_gson` | `GsonCastingExample.java` |
@@ -20,6 +21,18 @@
 | ProcessBuilder, 자식 프로세스 실행/재시작 | `src/exam/_10_process_builder` | `ProcessExample.java` |
 | AES 암호화/복호화 | `src/exam/_11_encryption_aes` | `AESEncryptionExample.java` |
 | Scanner 사용자 입력 | `src/exam/_12_user_input` | `UserInputExample.java` |
+| List, Map, Set, Queue, Heap | `src/exam/_13_collections` | `CollectionsExample.java` |
+| 정렬, 다중 조건 정렬, Comparator | `src/exam/_14_sort_comparator` | `SortComparatorExample.java` |
+| 문자열 파싱, `charAt`, 숫자 변환 | `src/exam/_15_string_parsing` | `StringParsingExample.java` |
+| BFS, DFS, 격자 탐색 | `src/exam/_16_bfs_dfs` | `BfsDfsExample.java` |
+| 이분탐색, lower bound, parametric search | `src/exam/_17_binary_search` | `BinarySearchExample.java` |
+| 투포인터, 슬라이딩 윈도우 | `src/exam/_18_two_pointer_sliding_window` | `TwoPointerSlidingWindowExample.java` |
+| 누적합, 2차원 구간합 | `src/exam/_19_prefix_sum` | `PrefixSumExample.java` |
+| Union-Find, 연결 여부, 사이클 | `src/exam/_20_union_find` | `UnionFindExample.java` |
+| 다익스트라, 최단거리 | `src/exam/_21_dijkstra` | `DijkstraExample.java` |
+| DP, 점화식, LCS | `src/exam/_22_dynamic_programming` | `DynamicProgrammingExample.java` |
+| 백트래킹, 순열, 조합 | `src/exam/_23_backtracking` | `BacktrackingExample.java` |
+| 날짜 파싱, 날짜/시간 차이 | `src/exam/_24_date_time` | `DateTimeExample.java` |
 | AI 모델 skeleton | `src/exam/_90_ai_model_stub` | `Predictor.java` |
 
 ## 추천 사용 흐름
@@ -50,6 +63,7 @@ find src -name "*.java" -print | xargs javac -cp "libs/*" -d bin
 ```bash
 java -cp "bin:libs/*" exam._01_file_read_write.FileReadWriteExample
 java -cp "bin:libs/*" exam._02_json_gson.GsonCastingExample
+java -cp "bin:libs/*" exam._16_bfs_dfs.BfsDfsExample
 java -cp "bin:libs/*" exam._04_http_jetty.HttpJettyExample
 ```
 

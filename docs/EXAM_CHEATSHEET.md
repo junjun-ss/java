@@ -3,6 +3,28 @@
 시험장에서 바로 복붙하기 좋은 짧은 패턴만 모았습니다.
 전체 실행 예제는 `src/exam/_번호_문제유형` 폴더 안의 `.java` 파일을 보면 됩니다.
 
+## Fast IO
+
+폴더: `src/exam/_00_fast_io`
+
+```java
+static class FastScanner {
+    private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private StringTokenizer st;
+
+    String next() throws IOException {
+        while (st == null || !st.hasMoreTokens()) {
+            st = new StringTokenizer(br.readLine());
+        }
+        return st.nextToken();
+    }
+
+    int nextInt() throws IOException {
+        return Integer.parseInt(next());
+    }
+}
+```
+
 ## File IO
 
 폴더: `src/exam/_01_file_read_write`
@@ -159,3 +181,114 @@ public class WebSocketClient {
 ```
 
 `javax.websocket-api`는 컴파일용 API이고, 실행 시에는 Tyrus 같은 구현체가 필요합니다. Maven을 쓰면 `pom.xml` 의존성을 참고하세요.
+
+## Collections
+
+폴더: `src/exam/_13_collections`
+
+```java
+Map<String, Integer> countMap = new HashMap<>();
+countMap.put(word, countMap.getOrDefault(word, 0) + 1);
+
+PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+
+Deque<Integer> deque = new ArrayDeque<>();
+deque.addFirst(1);
+deque.addLast(2);
+```
+
+## Sort / Comparator
+
+폴더: `src/exam/_14_sort_comparator`
+
+```java
+Arrays.sort(points, new Comparator<int[]>() {
+    @Override
+    public int compare(int[] a, int[] b) {
+        if (a[0] != b[0]) {
+            return a[0] - b[0];
+        }
+        return a[1] - b[1];
+    }
+});
+```
+
+## BFS / DFS
+
+폴더: `src/exam/_16_bfs_dfs`
+
+```java
+Queue<Integer> queue = new ArrayDeque<>();
+queue.offer(start);
+visited[start] = true;
+
+while (!queue.isEmpty()) {
+    int node = queue.poll();
+    for (int next : graph[node]) {
+        if (!visited[next]) {
+            visited[next] = true;
+            queue.offer(next);
+        }
+    }
+}
+```
+
+## Binary Search
+
+폴더: `src/exam/_17_binary_search`
+
+```java
+int left = 0;
+int right = arr.length;
+while (left < right) {
+    int mid = left + (right - left) / 2;
+    if (arr[mid] >= target) {
+        right = mid;
+    } else {
+        left = mid + 1;
+    }
+}
+```
+
+## Prefix Sum
+
+폴더: `src/exam/_19_prefix_sum`
+
+```java
+int[] prefix = new int[n + 1];
+for (int i = 1; i <= n; i++) {
+    prefix[i] = prefix[i - 1] + arr[i];
+}
+int sum = prefix[right] - prefix[left - 1];
+```
+
+## Union Find
+
+폴더: `src/exam/_20_union_find`
+
+```java
+int find(int x) {
+    if (parent[x] != x) {
+        parent[x] = find(parent[x]);
+    }
+    return parent[x];
+}
+```
+
+## Dijkstra
+
+폴더: `src/exam/_21_dijkstra`
+
+```java
+PriorityQueue<Node> pq = new PriorityQueue<>();
+dist[start] = 0;
+pq.offer(new Node(start, 0));
+
+while (!pq.isEmpty()) {
+    Node current = pq.poll();
+    if (current.cost > dist[current.vertex]) {
+        continue;
+    }
+}
+```
