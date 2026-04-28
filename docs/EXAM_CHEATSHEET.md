@@ -2,7 +2,7 @@
 
 시험장에서 바로 복붙하기 좋은 짧은 패턴만 모았습니다.
 전체 실행 예제는 `src/exam/_번호_문제유형` 폴더 안의 `.java` 파일을 보면 됩니다.
-HTTP/JSON 핵심 예제는 `src/main_exam/http`, `src/main_exam/json`을 먼저 보세요.
+파일/HTTP/JSON 핵심 예제는 `src/main_exam/file`, `src/main_exam/http`, `src/main_exam/json`을 먼저 보세요.
 
 ## Fast IO
 
@@ -28,7 +28,7 @@ static class FastScanner {
 
 ## File IO
 
-폴더: `src/exam/_01_file_read_write`
+폴더: `src/main_exam/file`
 
 텍스트 파일 라인 단위 읽기:
 
@@ -38,6 +38,18 @@ try (BufferedReader br = new BufferedReader(new FileReader("input.txt"))) {
     String line;
     while ((line = br.readLine()) != null) {
         lines.add(line);
+    }
+}
+```
+
+라인별로 바로 처리:
+
+```java
+try (BufferedReader br = new BufferedReader(new FileReader("input.txt"))) {
+    String line;
+    while ((line = br.readLine()) != null) {
+        String[] columns = line.trim().split("\\s+");
+        // columns를 바로 처리
     }
 }
 ```

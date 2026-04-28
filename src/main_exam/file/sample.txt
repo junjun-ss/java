@@ -1,0 +1,3 @@
+kim 20 seoul
+lee 25 busan
+park 30 incheon

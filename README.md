@@ -15,6 +15,7 @@
 
 | 시험 문제 키워드 | 들어갈 폴더 | 대표 파일 |
 | --- | --- | --- |
+| txt 파일 전체 읽기, 라인별 처리 | `src/main_exam/file` | `TextFileReadExample.java` |
 | HTTP 서버/클라이언트, JSON body 통신 | `src/main_exam/http` | `HttpJsonScenarioExample.java` |
 | JSON 파일 읽기, Gson 2.8.6 파싱 | `src/main_exam/json` | `JsonFileReadExample.java` |
 
@@ -77,6 +78,7 @@ find src -name "*.java" ! -path "*/_06_websocket_client/*" -print | xargs javac 
 
 ```bash
 java -cp "bin:libs/*" exam._01_file_read_write.FileReadWriteExample
+java -cp "bin:libs/*" main_exam.file.TextFileReadExample
 java -cp "bin:libs/*" main_exam.json.JsonFileReadExample
 java -cp "bin:libs/*" main_exam.http.HttpJsonScenarioExample
 java -cp "bin:libs/*" exam._16_bfs_dfs.BfsDfsExample
@@ -87,6 +89,7 @@ Windows에서는 classpath 구분자를 `:` 대신 `;`로 바꿔주세요.
 ## 보조 문서
 
 - [docs/EXAM_CHEATSHEET.md](docs/EXAM_CHEATSHEET.md): 시험장에서 복붙하기 좋은 짧은 코드 조각
+- [src/main_exam/file](src/main_exam/file): 핵심 txt 파일 읽기 예제
 - [src/main_exam/http](src/main_exam/http): 핵심 HTTP 통신 예제
 - [src/main_exam/json](src/main_exam/json): 핵심 JSON/Gson 예제
 - [src/exam/README.md](src/exam/README.md): 전체 예제 폴더맵
