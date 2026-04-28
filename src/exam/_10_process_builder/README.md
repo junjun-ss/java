@@ -5,7 +5,7 @@ Java에서 다른 Java class를 자식 프로세스로 실행하거나 재시작
 | 파일 | 용도 |
 | --- | --- |
 | `MyProcess.java` | 같은 프로젝트의 다른 class를 여러 프로세스로 실행 |
-| `ProcessExample.java` | 자식 프로세스 출력 읽기와 재시작 루프 |
+| `ProcessExample.java` | 자식 프로세스 실행, 출력 수집, 종료 코드 확인 |
 | `ChildProcess.java` | 자식 프로세스 역할 |
 | `ProcessThreadExample.java` | 프로세스 안에서 thread 실행 |
 

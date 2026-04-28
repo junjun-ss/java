@@ -13,19 +13,26 @@ import java.io.IOException;
 
 public class HttpReceiver {
 
-    static void startServer(int port, AbstractHandler handler) {
+    public static Server startServer(int port, AbstractHandler handler) throws Exception {
         Server server = new Server(port);
         server.setHandler(handler);
+        server.start();
+        return server;
+    }
 
-        try {
-            server.start();
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static String readBody(HttpServletRequest request) throws IOException {
+        StringBuilder requestBody = new StringBuilder();
+        try (BufferedReader reader = request.getReader()) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                requestBody.append(line);
+            }
         }
+        return requestBody.toString();
     }
 
     static class ServerHandler extends AbstractHandler {
-        private String serverName;
+        private final String serverName;
 
         public ServerHandler(String serverName) {
             this.serverName = serverName;
@@ -34,28 +41,19 @@ public class HttpReceiver {
         @Override
         public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
                 throws IOException, ServletException {
-            // HTTP 요청 처리
-            response.setContentType("text/html;charset=utf-8");
-//			"application/json"
+            response.setContentType("application/json;charset=UTF-8");
             response.setStatus(HttpServletResponse.SC_OK);
             baseRequest.setHandled(true);
 
-
-            // GET 방식일 떄 URL ? 뒤의 값들
             String queryString = request.getQueryString();  
+            String body = readBody(request);
 
-
-            // POST 방식일 떄 들어온 데이터 처리
-            StringBuilder requestBody = new StringBuilder();
-            BufferedReader reader = request.getReader();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                requestBody.append(line);
-            }
-            String data = requestBody.toString();
-
-            response.getWriter().println(queryString);
-            response.getWriter().println(data);
+            response.getWriter().println("{"
+                    + "\"server\":\"" + serverName + "\","
+                    + "\"method\":\"" + request.getMethod() + "\","
+                    + "\"query\":\"" + (queryString == null ? "" : queryString) + "\","
+                    + "\"body\":\"" + body.replace("\"", "\\\"") + "\""
+                    + "}");
         }
     }
 }

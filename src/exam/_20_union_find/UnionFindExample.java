@@ -9,11 +9,11 @@ public class UnionFindExample {
         System.out.println(uf.isConnected(1, 3));
     }
 
-    static class UnionFind {
+    public static class UnionFind {
         private final int[] parent;
         private final int[] rank;
 
-        UnionFind(int n) {
+        public UnionFind(int n) {
             parent = new int[n + 1];
             rank = new int[n + 1];
             for (int i = 1; i <= n; i++) {
@@ -21,14 +21,14 @@ public class UnionFindExample {
             }
         }
 
-        int find(int x) {
+        public int find(int x) {
             if (parent[x] != x) {
                 parent[x] = find(parent[x]);
             }
             return parent[x];
         }
 
-        void union(int a, int b) {
+        public void union(int a, int b) {
             int rootA = find(a);
             int rootB = find(b);
 
@@ -46,7 +46,7 @@ public class UnionFindExample {
             }
         }
 
-        boolean isConnected(int a, int b) {
+        public boolean isConnected(int a, int b) {
             return find(a) == find(b);
         }
     }

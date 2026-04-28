@@ -12,8 +12,8 @@ public class AProcessClass {
             thread1.join();
             thread2.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("A process interrupted", e);
         }
     }
 }
-

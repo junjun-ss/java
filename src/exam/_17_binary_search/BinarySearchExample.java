@@ -11,7 +11,7 @@ public class BinarySearchExample {
         System.out.println(parametricSearchExample(11));
     }
 
-    private static int binarySearch(int[] arr, int target) {
+    public static int binarySearch(int[] arr, int target) {
         int left = 0;
         int right = arr.length - 1;
 
@@ -30,7 +30,7 @@ public class BinarySearchExample {
         return -1;
     }
 
-    private static int lowerBound(int[] arr, int target) {
+    public static int lowerBound(int[] arr, int target) {
         int left = 0;
         int right = arr.length;
 
@@ -47,7 +47,7 @@ public class BinarySearchExample {
         return left;
     }
 
-    private static int upperBound(int[] arr, int target) {
+    public static int upperBound(int[] arr, int target) {
         int left = 0;
         int right = arr.length;
 
@@ -64,7 +64,7 @@ public class BinarySearchExample {
         return left;
     }
 
-    private static int parametricSearchExample(int need) {
+    public static int parametricSearchExample(int need) {
         int[] lengths = {7, 4, 5};
         Arrays.sort(lengths);
 
@@ -86,7 +86,7 @@ public class BinarySearchExample {
         return answer;
     }
 
-    private static boolean canCutAtLeast(int[] lengths, int unit, int need) {
+    public static boolean canCutAtLeast(int[] lengths, int unit, int need) {
         int count = 0;
         for (int length : lengths) {
             count += length / unit;

@@ -1,42 +1,36 @@
 package exam._22_dynamic_programming;
 
-import java.util.Arrays;
-
 public class DynamicProgrammingExample {
     public static void main(String[] args) {
-        fibonacciExample();
-        oneDimensionalDpExample();
-        twoDimensionalDpExample();
+        System.out.println(fibonacci(10));
+        System.out.println(maxNonAdjacentSum(new int[] {10, 20, 15, 25, 10, 20}));
+        System.out.println(lcsLength("ABCBDAB", "BDCABA"));
     }
 
-    private static void fibonacciExample() {
-        int n = 10;
+    public static int fibonacci(int n) {
         int[] dp = new int[n + 1];
-        dp[1] = 1;
+        if (n >= 1) {
+            dp[1] = 1;
+        }
 
         for (int i = 2; i <= n; i++) {
             dp[i] = dp[i - 1] + dp[i - 2];
         }
 
-        System.out.println(dp[n]);
+        return dp[n];
     }
 
-    private static void oneDimensionalDpExample() {
-        int[] scores = {0, 10, 20, 15, 25, 10, 20};
-        int n = scores.length - 1;
+    public static int maxNonAdjacentSum(int[] scores) {
+        int n = scores.length;
         int[] dp = new int[n + 1];
-
-        dp[1] = scores[1];
-        for (int i = 2; i <= n; i++) {
-            dp[i] = Math.max(dp[i - 1], dp[i - 2] + scores[i]);
+        for (int i = 1; i <= n; i++) {
+            int take = dp[Math.max(0, i - 2)] + scores[i - 1];
+            dp[i] = Math.max(dp[i - 1], take);
         }
-
-        System.out.println(dp[n]);
+        return dp[n];
     }
 
-    private static void twoDimensionalDpExample() {
-        String a = "ABCBDAB";
-        String b = "BDCABA";
+    public static int lcsLength(String a, String b) {
         int[][] dp = new int[a.length() + 1][b.length() + 1];
 
         for (int i = 1; i <= a.length(); i++) {
@@ -49,7 +43,6 @@ public class DynamicProgrammingExample {
             }
         }
 
-        System.out.println(dp[a.length()][b.length()]);
-        System.out.println(Arrays.deepToString(dp));
+        return dp[a.length()][b.length()];
     }
 }

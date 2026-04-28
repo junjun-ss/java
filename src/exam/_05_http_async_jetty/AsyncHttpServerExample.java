@@ -14,40 +14,33 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AsyncHttpServerExample extends AbstractHandler {
     private final Gson gson = new Gson();
     private final AtomicInteger idCounter = new AtomicInteger(0);
-    private final ThreadLocal<AtomicInteger> independentIdCounter = ThreadLocal.withInitial(AtomicInteger::new);
 
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if ("/id".equals(target) && "POST".equals(request.getMethod())) {
-            response.setContentType("application/json");
+            response.setContentType("application/json;charset=UTF-8");
             response.setStatus(HttpServletResponse.SC_OK);
 
             AsyncContext asyncContext = request.startAsync();
             asyncContext.start(() -> {
                 try {
-                    BufferedReader reader = request.getReader();
-                    Person person = gson.fromJson(reader, Person.class);
-                    System.out.println(person.getAge());
-                    reader.close();
+                    Person person = readPerson(request);
 
-                    // Simulate heavy processing by sleeping for 2 seconds
-                    Thread.sleep(3000);
+                    Thread.sleep(100);
 
                     person.setId(idCounter.getAndIncrement());
-                    person.setIndependentId(independentIdCounter.get().getAndIncrement());
 
                     PrintWriter writer = response.getWriter();
                     writer.println(gson.toJson(person));
                     writer.flush();
                 } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    Thread.currentThread().interrupt();
                 } finally {
                     asyncContext.complete();
                 }
@@ -59,26 +52,41 @@ public class AsyncHttpServerExample extends AbstractHandler {
         baseRequest.setHandled(true);
     }
 
-    public static void main(String[] args) throws Exception {
-    	QueuedThreadPool threadPool = new QueuedThreadPool(100, 10);
-    	Server server = new Server(threadPool);
-    	ServerConnector connector = new ServerConnector(server);
-    	connector.setPort(8080);
-    	// 서버에 ServerConnector를 추가합니다.
-    	server.addConnector(connector);
-    	
+    private Person readPerson(HttpServletRequest request) throws IOException {
+        try (BufferedReader reader = request.getReader()) {
+            return gson.fromJson(reader, Person.class);
+        }
+    }
+
+    public static Server start(int port) throws Exception {
+        QueuedThreadPool threadPool = new QueuedThreadPool(20, 2);
+        Server server = new Server(threadPool);
+        ServerConnector connector = new ServerConnector(server);
+        connector.setPort(port);
+        server.addConnector(connector);
         server.setHandler(new AsyncHttpServerExample());
         server.start();
+        return server;
+    }
+
+    public static void main(String[] args) throws Exception {
+        Server server = start(18083);
+        System.out.println("Async Jetty server started: http://localhost:18083/id");
         server.join();
     }
 
-    private static class Person {
+    public static class Person {
         private String name;
         private int age;
         private int id;
-        private int independentId;
 
-        // Getter and Setter methods
+        public Person() {
+        }
+
+        public Person(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
 
         public String getName() {
             return name;
@@ -102,14 +110,6 @@ public class AsyncHttpServerExample extends AbstractHandler {
 
         public void setId(int id) {
             this.id = id;
-        }
-
-        public int getIndependentId() {
-            return independentId;
-        }
-
-        public void setIndependentId(int independentId) {
-            this.independentId = independentId;
         }
     }
 }

@@ -16,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class GsonCastingExample {
     private static final String PERSON_JSON_FILE = "src/exam/_02_json_gson/person.json";
+    private static final Gson GSON = new Gson();
 
     public static JsonObject stringToJson(String jsonString) {
         JsonParser jsonParser = new JsonParser();
@@ -23,47 +24,41 @@ public class GsonCastingExample {
     }
 
     public static String jsonToString(JsonObject json) {
-        Gson gson = new Gson();
-        return gson.toJson(json);
+        return GSON.toJson(json);
     }
 
     public static Person stringToPojo(String jsonString) {
-        Gson gson = new Gson();
-        return gson.fromJson(jsonString, Person.class);
+        return GSON.fromJson(jsonString, Person.class);
     }
 
     public static Person readJsonFile() {
-        Gson gson = new Gson();
+        return readJsonFile(PERSON_JSON_FILE, Person.class);
+    }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(PERSON_JSON_FILE))) {
-            return gson.fromJson(reader, Person.class);
+    public static <T> T readJsonFile(String filePath, Class<T> type) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            return GSON.fromJson(reader, type);
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            throw new IllegalStateException("JSON 파일 읽기 실패: " + filePath, e);
         }
     }
 
     public static Person extractInTwoDepth(String jsonString) {
-        Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
+        JsonObject jsonObject = GSON.fromJson(jsonString, JsonObject.class);
 
         JsonObject testObject = jsonObject.getAsJsonObject("test");
-        Person person = gson.fromJson(testObject, Person.class);
-        return person;
+        return GSON.fromJson(testObject, Person.class);
     }
     
     public static List<Person> stringToPojoJsonList(String jsonString) {
-
-        Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
+        JsonObject jsonObject = GSON.fromJson(jsonString, JsonObject.class);
 
         JsonArray testArray = jsonObject.getAsJsonArray("test");
-
         List<Person> personList = new ArrayList<>();
         
         for (JsonElement element : testArray) {
             JsonObject testObject = element.getAsJsonObject();
-            Person person = gson.fromJson(testObject, Person.class);
+            Person person = GSON.fromJson(testObject, Person.class);
 
             personList.add(person);
         }
@@ -72,20 +67,12 @@ public class GsonCastingExample {
     }
     
     public static List<Person> stringToPojoJsonListByType(String jsonString) {
-        Gson gson = new Gson();
         Type listType = new TypeToken<List<Person>>() {}.getType();
-        List<Person> personList = gson.fromJson(jsonString, listType);
-
-        return personList;
+        return GSON.fromJson(jsonString, listType);
     }
     
     public static List<Person> stringToPojoJsonArray(String jsonString) {
-
-        Gson gson = new Gson();
-        Type listType = new TypeToken<List<Person>>() {}.getType();
-        List<Person> personList = gson.fromJson(jsonString, listType);
-        
-        return personList;
+        return stringToPojoJsonListByType(jsonString);
     }
     
     public static void main(String[] args) {

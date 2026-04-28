@@ -5,6 +5,7 @@ import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.StringContentProvider;
+import org.eclipse.jetty.server.Server;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,17 +14,20 @@ public class JettyHttpClientExample {
     private static final long TIMEOUT_SECONDS = 3L;
 
     public static void main(String[] args) throws Exception {
+        Server server = EmbeddedJettyServer.start(18084);
         HttpClient client = new HttpClient();
         client.start();
 
         try {
-            System.out.println(get(client, "http://localhost:8080/health"));
+            System.out.println(get(client, "http://localhost:18084/health"));
 
             HttpMessage requestBody = new HttpMessage("client", "hello jetty");
-            HttpMessage responseBody = postJson(client, "http://localhost:8080/echo", requestBody, HttpMessage.class);
+            HttpMessage responseBody = postJson(client, "http://localhost:18084/echo", requestBody, HttpMessage.class);
             System.out.println(responseBody);
         } finally {
             client.stop();
+            server.stop();
+            server.join();
         }
     }
 
@@ -39,15 +43,18 @@ public class JettyHttpClientExample {
 
     public static <T> T postJson(HttpClient client, String url, Object body, Class<T> responseType) throws Exception {
         String jsonBody = GSON.toJson(body);
-        Request request = client.newRequest(url)
+        Request request = buildJsonPost(client, url, jsonBody);
+        ContentResponse response = request.send();
+        validate(response);
+        return GSON.fromJson(response.getContentAsString(), responseType);
+    }
+
+    public static Request buildJsonPost(HttpClient client, String url, String jsonBody) {
+        return client.newRequest(url)
                 .method("POST")
                 .timeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
                 .header("Content-Type", "application/json;charset=UTF-8")
                 .content(new StringContentProvider(jsonBody));
-
-        ContentResponse response = request.send();
-        validate(response);
-        return GSON.fromJson(response.getContentAsString(), responseType);
     }
 
     private static void validate(ContentResponse response) {

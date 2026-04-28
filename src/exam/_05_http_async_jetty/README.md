@@ -9,4 +9,6 @@ HTTP 통신은 Jetty 9 embedded server와 Jetty 9 `HttpClient` 기준으로 작�
 | `AsyncHttpServerExample.java` | Jetty async request 처리 |
 | `AsyncClientExample.java` | 여러 요청을 동시에 보내는 client |
 
-실행 순서: 서버 `AsyncHttpServerExample.java` 실행 후 client `AsyncClientExample.java` 실행
+가장 먼저 볼 파일: `AsyncClientExample.java`
+
+`AsyncClientExample.main()`은 로컬 async server를 직접 띄우고 병렬 요청을 보낸 뒤 종료합니다.

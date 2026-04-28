@@ -19,22 +19,20 @@ public class AESEncryptionExample {
 
     public static String encryptAES(String input, String key) {
         try {
-            SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
+            SecretKeySpec secretKey = createAesKey(key);
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
             byte[] encryptedBytes = cipher.doFinal(input.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(encryptedBytes);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("AES 암호화 실패", e);
         }
-
-        return null;
     }
 
     public static String decryptAES(String encrypted, String key) {
         try {
-            SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
+            SecretKeySpec secretKey = createAesKey(key);
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
 
@@ -42,9 +40,15 @@ public class AESEncryptionExample {
             byte[] decryptedBytes = cipher.doFinal(decodedBytes);
             return new String(decryptedBytes, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("AES 복호화 실패", e);
         }
+    }
 
-        return null;
+    private static SecretKeySpec createAesKey(String key) {
+        byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
+        if (keyBytes.length != 16 && keyBytes.length != 24 && keyBytes.length != 32) {
+            throw new IllegalArgumentException("AES key는 16/24/32 byte여야 합니다.");
+        }
+        return new SecretKeySpec(keyBytes, "AES");
     }
 }

@@ -13,13 +13,13 @@ public class SortComparatorExample {
         twoDimensionalArraySort();
     }
 
-    private static void intArraySort() {
+    public static void intArraySort() {
         int[] numbers = {3, 1, 2};
         Arrays.sort(numbers);
         System.out.println(Arrays.toString(numbers));
     }
 
-    private static void objectSort() {
+    public static void objectSort() {
         List<Person> people = new ArrayList<>();
         people.add(new Person("kim", 20));
         people.add(new Person("lee", 20));
@@ -38,7 +38,7 @@ public class SortComparatorExample {
         System.out.println(people);
     }
 
-    private static void twoDimensionalArraySort() {
+    public static void twoDimensionalArraySort() {
         int[][] points = {
             {2, 3},
             {1, 5},
@@ -60,11 +60,11 @@ public class SortComparatorExample {
         }
     }
 
-    static class Person {
+    public static class Person {
         String name;
         int age;
 
-        Person(String name, int age) {
+        public Person(String name, int age) {
             this.name = name;
             this.age = age;
         }

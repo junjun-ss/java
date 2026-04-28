@@ -8,10 +8,10 @@ public class FileMonitorExample {
     private static final String SAMPLE_FILE = "src/exam/_01_file_read_write/input.txt";
 
     public static void main(String[] args) {
-        startMonitoring(SAMPLE_FILE);
+        monitorAppendedLines(SAMPLE_FILE, 3, 300);
     }
 
-    public static void startMonitoring(String fileName) {
+    public static void monitorAppendedLines(String fileName, int maxChecks, long intervalMillis) {
         File targetFile = new File(fileName);
         if (!targetFile.exists()) {
             System.out.println("파일이 없습니다: " + fileName);
@@ -23,7 +23,7 @@ public class FileMonitorExample {
             long lastPointer = targetFile.length();
 
             System.out.println("파일 변경 감시 시작: " + fileName);
-            while (true) {
+            for (int check = 0; check < maxChecks; check++) {
                 long currentModified = getLastModified(fileName);
                 if (currentModified > lastModified) {
                     lastModified = currentModified;
@@ -38,10 +38,11 @@ public class FileMonitorExample {
                     System.out.println("새로운 데이터가 추가되었습니다.");
                 }
 
-                Thread.sleep(500);
+                Thread.sleep(intervalMillis);
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("파일 감시 실패: " + fileName, e);
         }
     }
 

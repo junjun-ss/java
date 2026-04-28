@@ -15,15 +15,15 @@ import java.util.concurrent.TimeUnit;
 @ClientEndpoint
 public class WebSocketClient {
     private static CountDownLatch latch;
+    private static String firstMessage = "안녕하세요!";
 
     @OnOpen
     public void onOpen(Session session) {
         System.out.println("연결이 열렸습니다.");
-        // 연결이 열리면 메시지를 전송합니다.
         try {
-            session.getBasicRemote().sendText("안녕하세요!");
+            session.getBasicRemote().sendText(firstMessage);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("WebSocket 메시지 전송 실패", e);
         }
     }
 
@@ -35,22 +35,28 @@ public class WebSocketClient {
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
         System.out.println("연결이 닫혔습니다. 이유: " + closeReason.getReasonPhrase());
-        latch.countDown();
+        if (latch != null) {
+            latch.countDown();
+        }
     }
 
-    public static void main(String[] args) {
-        latch = new CountDownLatch(1);
-
-        try {
-            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            String uri = "ws://localhost:8080/websocket"; // WebSocket 서버 주소 입력
-
-            System.out.println("연결 중...");
-            container.connectToServer(WebSocketClient.class, URI.create(uri));
-
-            latch.await(5, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static void main(String[] args) throws Exception {
+        if (args.length == 0) {
+            System.out.println("사용법: java ... WebSocketClient ws://localhost:8080/websocket [message]");
+            return;
         }
+
+        String message = args.length >= 2 ? args[1] : "안녕하세요!";
+        connect(args[0], message, 5);
+    }
+
+    public static void connect(String uri, String message, long waitSeconds) throws Exception {
+        latch = new CountDownLatch(1);
+        firstMessage = message;
+
+        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+        System.out.println("연결 중...");
+        container.connectToServer(WebSocketClient.class, URI.create(uri));
+        latch.await(waitSeconds, TimeUnit.SECONDS);
     }
 }

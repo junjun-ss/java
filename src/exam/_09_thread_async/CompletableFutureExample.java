@@ -6,34 +6,26 @@ import java.util.concurrent.Executors;
 
 public class CompletableFutureExample {
     public static void main(String[] args) {
+        System.out.println(sumTwoTasks());
+    }
+
+    public static int sumTwoTasks() {
         ExecutorService executor = Executors.newFixedThreadPool(2);
+        try {
+            CompletableFuture<Integer> first = CompletableFuture.supplyAsync(() -> sumRange(1, 50), executor);
+            CompletableFuture<Integer> second = CompletableFuture.supplyAsync(() -> sumRange(51, 100), executor);
 
-        CompletableFuture<Void> asyncTask1 = CompletableFuture.runAsync(() -> {
-            for (int i = 1; i <= 100; i++) {
-                System.out.println("Async Thread 1: " + i);
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, executor);
+            return first.thenCombine(second, Integer::sum).join();
+        } finally {
+            executor.shutdown();
+        }
+    }
 
-        CompletableFuture<Void> asyncTask2 = CompletableFuture.runAsync(() -> {
-            for (int i = 1; i <= 100; i++) {
-                System.out.println("Async Thread 2: " + i);
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, executor);
-
-        CompletableFuture.allOf(asyncTask1, asyncTask2)
-                .thenRunAsync(() -> System.out.println("All tasks completed."))
-                .join();
-
-        executor.shutdown();
+    public static int sumRange(int start, int end) {
+        int sum = 0;
+        for (int i = start; i <= end; i++) {
+            sum += i;
+        }
+        return sum;
     }
 }

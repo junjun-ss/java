@@ -4,20 +4,17 @@ import java.util.Arrays;
 
 public class StringParsingExample {
     public static void main(String[] args) {
-        splitExample();
-        charLoopExample();
-        numberParsingExample();
-        stringBuilderExample();
+        System.out.println(Arrays.toString(splitColumns("kim 20 seoul")));
+        System.out.println(countDigits("a1b2c3"));
+        System.out.println(parseInt("12345") + 10);
+        System.out.println(joinWithDash("java", "test"));
     }
 
-    private static void splitExample() {
-        String line = "kim 20 seoul";
-        String[] parts = line.split(" ");
-        System.out.println(Arrays.toString(parts));
+    public static String[] splitColumns(String line) {
+        return line.trim().split("\\s+");
     }
 
-    private static void charLoopExample() {
-        String text = "a1b2c3";
+    public static int countDigits(String text) {
         int digitCount = 0;
 
         for (int i = 0; i < text.length(); i++) {
@@ -27,21 +24,22 @@ public class StringParsingExample {
             }
         }
 
-        System.out.println(digitCount);
+        return digitCount;
     }
 
-    private static void numberParsingExample() {
-        String numberText = "12345";
-        int number = Integer.parseInt(numberText);
-        System.out.println(number + 10);
+    public static int parseInt(String numberText) {
+        return Integer.parseInt(numberText);
     }
 
-    private static void stringBuilderExample() {
+    public static String joinWithDash(String first, String second) {
         StringBuilder sb = new StringBuilder();
-        sb.append("java");
+        sb.append(first);
         sb.append("-");
-        sb.append("test");
-        System.out.println(sb.toString());
-        System.out.println(sb.reverse().toString());
+        sb.append(second);
+        return sb.toString();
+    }
+
+    public static String reverse(String text) {
+        return new StringBuilder(text).reverse().toString();
     }
 }

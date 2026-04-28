@@ -15,7 +15,7 @@ public class BfsDfsExample {
         gridBfsExample();
     }
 
-    private static void graphBfsDfsExample() {
+    public static void graphBfsDfsExample() {
         List<Integer>[] graph = new ArrayList[5];
         for (int i = 0; i < graph.length; i++) {
             graph[i] = new ArrayList<>();
@@ -25,30 +25,35 @@ public class BfsDfsExample {
         addEdge(graph, 1, 3);
         addEdge(graph, 2, 4);
 
-        boolean[] visited = new boolean[5];
-        dfs(1, graph, visited);
-        System.out.println();
-
-        bfs(1, graph);
+        System.out.println(dfsOrder(1, graph));
+        System.out.println(bfsOrder(1, graph));
     }
 
-    private static void addEdge(List<Integer>[] graph, int a, int b) {
+    public static void addEdge(List<Integer>[] graph, int a, int b) {
         graph[a].add(b);
         graph[b].add(a);
     }
 
-    private static void dfs(int node, List<Integer>[] graph, boolean[] visited) {
+    public static List<Integer> dfsOrder(int start, List<Integer>[] graph) {
+        boolean[] visited = new boolean[graph.length];
+        List<Integer> order = new ArrayList<>();
+        dfs(start, graph, visited, order);
+        return order;
+    }
+
+    private static void dfs(int node, List<Integer>[] graph, boolean[] visited, List<Integer> order) {
         visited[node] = true;
-        System.out.print(node + " ");
+        order.add(node);
 
         for (int next : graph[node]) {
             if (!visited[next]) {
-                dfs(next, graph, visited);
+                dfs(next, graph, visited, order);
             }
         }
     }
 
-    private static void bfs(int start, List<Integer>[] graph) {
+    public static List<Integer> bfsOrder(int start, List<Integer>[] graph) {
+        List<Integer> order = new ArrayList<>();
         boolean[] visited = new boolean[graph.length];
         Queue<Integer> queue = new ArrayDeque<>();
         queue.offer(start);
@@ -56,7 +61,7 @@ public class BfsDfsExample {
 
         while (!queue.isEmpty()) {
             int node = queue.poll();
-            System.out.print(node + " ");
+            order.add(node);
 
             for (int next : graph[node]) {
                 if (!visited[next]) {
@@ -65,10 +70,10 @@ public class BfsDfsExample {
                 }
             }
         }
-        System.out.println();
+        return order;
     }
 
-    private static void gridBfsExample() {
+    public static void gridBfsExample() {
         int[][] grid = {
             {1, 1, 0},
             {0, 1, 1},
@@ -81,7 +86,7 @@ public class BfsDfsExample {
         }
     }
 
-    private static int[][] bfsGrid(int[][] grid, int startRow, int startCol) {
+    public static int[][] bfsGrid(int[][] grid, int startRow, int startCol) {
         int rows = grid.length;
         int cols = grid[0].length;
         int[][] distance = new int[rows][cols];

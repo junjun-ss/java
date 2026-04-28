@@ -40,7 +40,8 @@ public class EmbeddedJettyServer {
             }
 
             if ("/echo".equals(target) && "POST".equals(request.getMethod())) {
-                HttpMessage message = GSON.fromJson(readBody(request), HttpMessage.class);
+                String body = readBody(request);
+                HttpMessage message = GSON.fromJson(body, HttpMessage.class);
                 if (message == null) {
                     writeJson(response, HttpServletResponse.SC_BAD_REQUEST, "{\"error\":\"empty json body\"}");
                     baseRequest.setHandled(true);

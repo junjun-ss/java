@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,24 +17,37 @@ public class FileReadWriteExample {
 
     public static List<String> readFileLines(String filePath) {
         List<String> lines = new ArrayList<>();
-        Map<String, String> firstTwoColumns = new HashMap<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
                 lines.add(line);
-
-                String[] columns = line.split(" ");
-                if (columns.length >= 2) {
-                    firstTwoColumns.put(columns[0], columns[1]);
-                }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("파일 읽기 실패: " + filePath, e);
         }
 
-        System.out.println(firstTwoColumns);
         return lines;
+    }
+
+    public static List<String[]> readSplitRows(String filePath, String delimiterRegex) {
+        List<String[]> rows = new ArrayList<>();
+        for (String line : readFileLines(filePath)) {
+            if (!line.trim().isEmpty()) {
+                rows.add(line.trim().split(delimiterRegex));
+            }
+        }
+        return rows;
+    }
+
+    public static Map<String, String> readFirstTwoColumnsAsMap(String filePath, String delimiterRegex) {
+        Map<String, String> result = new HashMap<>();
+        for (String[] columns : readSplitRows(filePath, delimiterRegex)) {
+            if (columns.length >= 2) {
+                result.put(columns[0], columns[1]);
+            }
+        }
+        return result;
     }
 
     public static void writeFileLines(String filePath, List<String> lines) {
@@ -43,12 +57,16 @@ public class FileReadWriteExample {
                 bw.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("파일 쓰기 실패: " + filePath, e);
         }
     }
 
     public static void main(String[] args) {
         List<String> lines = readFileLines(INPUT_FILE);
         writeFileLines(OUTPUT_FILE, lines);
+
+        Map<String, String> firstTwoColumns = readFirstTwoColumnsAsMap(INPUT_FILE, "\\s+");
+        System.out.println(firstTwoColumns);
+        System.out.println(Arrays.deepToString(readSplitRows(INPUT_FILE, "\\s+").toArray()));
     }
 }

@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class MessageQueue {
-    private Queue<String> queue;
+    private final Queue<String> queue;
 
     public MessageQueue() {
         this.queue = new LinkedList<>();
@@ -20,5 +20,21 @@ public class MessageQueue {
             wait(); // 큐가 비어있으면 대기
         }
         return queue.poll();
+    }
+
+    public synchronized String dequeue(long timeoutMillis) throws InterruptedException {
+        long deadline = System.currentTimeMillis() + timeoutMillis;
+        while (queue.isEmpty()) {
+            long remain = deadline - System.currentTimeMillis();
+            if (remain <= 0) {
+                return null;
+            }
+            wait(remain);
+        }
+        return queue.poll();
+    }
+
+    public synchronized int size() {
+        return queue.size();
     }
 }

@@ -16,71 +16,70 @@ import java.util.TreeMap;
 
 public class CollectionsExample {
     public static void main(String[] args) {
-        listExample();
-        mapCountingExample();
-        setExample();
-        queueDequeExample();
-        priorityQueueExample();
-        treeMapExample();
+        System.out.println(sortedList(Arrays.asList(3, 1, 2)));
+        System.out.println(countWords(new String[] {"java", "test", "java", "code"}));
+        System.out.println(uniqueSet(Arrays.asList(10, 10, 20)));
+        System.out.println(queueExample());
+        System.out.println(heapExample());
+        System.out.println(treeMapExample());
     }
 
-    private static void listExample() {
-        List<Integer> numbers = new ArrayList<>(Arrays.asList(3, 1, 2));
+    public static List<Integer> sortedList(List<Integer> input) {
+        List<Integer> numbers = new ArrayList<>(input);
         Collections.sort(numbers);
-        System.out.println(numbers);
+        return numbers;
     }
 
-    private static void mapCountingExample() {
-        String[] words = {"java", "test", "java", "code"};
+    public static Map<String, Integer> countWords(String[] words) {
         Map<String, Integer> countMap = new HashMap<>();
-
         for (String word : words) {
             countMap.put(word, countMap.getOrDefault(word, 0) + 1);
         }
-
-        System.out.println(countMap);
+        return countMap;
     }
 
-    private static void setExample() {
+    public static Set<Integer> uniqueSet(List<Integer> values) {
         Set<Integer> visited = new HashSet<>();
-        visited.add(10);
-        visited.add(10);
-        System.out.println(visited.contains(10));
+        visited.addAll(values);
+        return visited;
     }
 
-    private static void queueDequeExample() {
+    public static List<Integer> queueExample() {
+        List<Integer> result = new ArrayList<>();
         Queue<Integer> queue = new ArrayDeque<>();
         queue.offer(1);
         queue.offer(2);
-        System.out.println(queue.poll());
+        result.add(queue.poll());
 
         Deque<Integer> deque = new ArrayDeque<>();
         deque.addFirst(1);
         deque.addLast(2);
-        System.out.println(deque.pollLast());
+        result.add(deque.pollLast());
+        return result;
     }
 
-    private static void priorityQueueExample() {
+    public static List<Integer> heapExample() {
+        List<Integer> result = new ArrayList<>();
         PriorityQueue<Integer> minHeap = new PriorityQueue<>();
         minHeap.offer(5);
         minHeap.offer(1);
         minHeap.offer(3);
-        System.out.println(minHeap.poll());
+        result.add(minHeap.poll());
 
         PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
         maxHeap.offer(5);
         maxHeap.offer(1);
         maxHeap.offer(3);
-        System.out.println(maxHeap.poll());
+        result.add(maxHeap.poll());
+        return result;
     }
 
-    private static void treeMapExample() {
+    public static List<Integer> treeMapExample() {
         TreeMap<Integer, String> treeMap = new TreeMap<>();
         treeMap.put(30, "thirty");
         treeMap.put(10, "ten");
         treeMap.put(20, "twenty");
 
-        System.out.println(treeMap.firstKey());
-        System.out.println(treeMap.ceilingKey(15));
+        return Arrays.asList(treeMap.firstKey(), treeMap.ceilingKey(15));
     }
 }

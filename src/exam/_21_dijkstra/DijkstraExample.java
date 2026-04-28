@@ -25,11 +25,11 @@ public class DijkstraExample {
         System.out.println(Arrays.toString(dist));
     }
 
-    private static void addEdge(List<Edge>[] graph, int from, int to, long cost) {
+    public static void addEdge(List<Edge>[] graph, int from, int to, long cost) {
         graph[from].add(new Edge(to, cost));
     }
 
-    private static long[] dijkstra(List<Edge>[] graph, int start) {
+    public static long[] dijkstra(List<Edge>[] graph, int start) {
         long[] dist = new long[graph.length];
         Arrays.fill(dist, INF);
 
@@ -57,21 +57,21 @@ public class DijkstraExample {
         return dist;
     }
 
-    static class Edge {
+    public static class Edge {
         int to;
         long cost;
 
-        Edge(int to, long cost) {
+        public Edge(int to, long cost) {
             this.to = to;
             this.cost = cost;
         }
     }
 
-    static class Node implements Comparable<Node> {
+    public static class Node implements Comparable<Node> {
         int vertex;
         long cost;
 
-        Node(int vertex, long cost) {
+        public Node(int vertex, long cost) {
             this.vertex = vertex;
             this.cost = cost;
         }

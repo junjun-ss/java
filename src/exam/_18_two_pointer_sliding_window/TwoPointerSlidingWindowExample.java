@@ -13,7 +13,7 @@ public class TwoPointerSlidingWindowExample {
     }
 
     // 모든 원소가 0 이상일 때만 쓸 수 있는 투포인터 방식입니다.
-    private static int countPositiveSubarraySum(int[] arr, int target) {
+    public static int countPositiveSubarraySum(int[] arr, int target) {
         int left = 0;
         int sum = 0;
         int count = 0;
@@ -34,7 +34,7 @@ public class TwoPointerSlidingWindowExample {
     }
 
     // 음수가 섞일 수 있으면 prefix sum + HashMap 방식을 사용합니다.
-    private static int countSubarraySumWithNegatives(int[] arr, int target) {
+    public static int countSubarraySumWithNegatives(int[] arr, int target) {
         Map<Integer, Integer> prefixCount = new HashMap<>();
         prefixCount.put(0, 1);
 
@@ -49,7 +49,7 @@ public class TwoPointerSlidingWindowExample {
         return count;
     }
 
-    private static int minLengthAtLeast(int[] arr, int target) {
+    public static int minLengthAtLeast(int[] arr, int target) {
         int left = 0;
         int sum = 0;
         int answer = Integer.MAX_VALUE;
@@ -66,7 +66,7 @@ public class TwoPointerSlidingWindowExample {
         return answer == Integer.MAX_VALUE ? 0 : answer;
     }
 
-    private static int longestSubstringWithoutDuplicate(String text) {
+    public static int longestSubstringWithoutDuplicate(String text) {
         Map<Character, Integer> lastIndex = new HashMap<>();
         int left = 0;
         int answer = 0;

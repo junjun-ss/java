@@ -1,14 +1,10 @@
 package exam._10_process_builder;
 
 public class ChildProcess {
-    public static void main(String[] args) {
-        for (int i = 1; i <= 10; i++) {
+    public static void main(String[] args) throws InterruptedException {
+        int count = args.length > 0 ? Integer.parseInt(args[0]) : 3;
+        for (int i = 1; i <= count; i++) {
             System.out.println("Child Process: " + i);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 }

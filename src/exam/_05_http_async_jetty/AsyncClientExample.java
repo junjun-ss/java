@@ -4,42 +4,59 @@ import com.google.gson.Gson;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.util.StringContentProvider;
+import org.eclipse.jetty.server.Server;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
 public class AsyncClientExample {
-    private static final int NUM_REQUESTS = 100;
+    private static final int NUM_REQUESTS = 5;
+    private static final String URL = "http://localhost:18083/id";
 
     public static void main(String[] args) throws Exception {
+        Server server = AsyncHttpServerExample.start(18083);
+        try {
+            List<String> responses = sendParallelRequests(URL, NUM_REQUESTS);
+            for (String response : responses) {
+                System.out.println("Received response: " + response);
+            }
+        } finally {
+            server.stop();
+            server.join();
+        }
+    }
+
+    public static List<String> sendParallelRequests(String url, int requestCount) throws Exception {
         HttpClient httpClient = new HttpClient();
-        ExecutorService executorService = Executors.newFixedThreadPool(NUM_REQUESTS);
+        ExecutorService executorService = Executors.newFixedThreadPool(requestCount);
         List<Future<String>> futures = new ArrayList<>();
+        List<String> responses = new ArrayList<>();
 
         try {
             httpClient.start();
 
-            for (int i = 0; i < NUM_REQUESTS; i++) {
-                Future<String> future = executorService.submit(() -> sendRequest(httpClient));
+            for (int i = 0; i < requestCount; i++) {
+                final int index = i;
+                Future<String> future = executorService.submit(() -> sendRequest(httpClient, url, "user-" + index, 20 + index));
                 futures.add(future);
             }
 
             for (Future<String> future : futures) {
-                String response = future.get();
-                System.out.println("Received response: " + response);
+                responses.add(future.get());
             }
+            return responses;
         } finally {
             executorService.shutdown();
             httpClient.stop();
         }
     }
 
-    private static String sendRequest(HttpClient httpClient) throws Exception {
+    private static String sendRequest(HttpClient httpClient, String url, String name, int age) throws Exception {
         Gson gson = new Gson();
-        String payload = gson.toJson(new Person("John Doe", 30));
+        String payload = gson.toJson(new AsyncHttpServerExample.Person(name, age));
 
-        ContentResponse response = httpClient.newRequest("http://localhost:8080/id")
+        ContentResponse response = httpClient.newRequest(url)
                 .method("POST")
                 .timeout(5, TimeUnit.SECONDS)
                 .header("Content-Type", "application/json;charset=UTF-8")
@@ -51,35 +68,5 @@ public class AsyncClientExample {
         }
 
         throw new IllegalStateException("Request failed with response code: " + response.getStatus());
-    }
-
-    private static class Person {
-        private String name;
-        private int age;
-
-        // Getter and Setter methods
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getAge() {
-            return age;
-        }
-
-        public void setAge(int age) {
-            this.age = age;
-        }
-
-		public Person(String name, int age) {
-			super();
-			this.name = name;
-			this.age = age;
-		}
-
     }
 }
