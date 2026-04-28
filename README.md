@@ -3,7 +3,22 @@
 회사 Java 시험에서 자주 나오는 유형을 폴더명만 보고 바로 찾아 쓰기 위한 예제 모음입니다.
 문제가 나오면 아래 표에서 키워드를 찾고, 해당 폴더로 들어가 필요한 `.java` 파일을 복사해서 쓰면 됩니다.
 
+기준 환경:
+
+- Java 8
+- HTTP: Jetty 9 embedded server + Jetty 9 `HttpClient`
+- JSON: Google Gson `2.8.6`
+
 ## 문제 나오면 여기로
+
+### 핵심 시험 패키지
+
+| 시험 문제 키워드 | 들어갈 폴더 | 대표 파일 |
+| --- | --- | --- |
+| HTTP 서버/클라이언트, JSON body 통신 | `src/main_exam/http` | `HttpJsonScenarioExample.java` |
+| JSON 파일 읽기, Gson 2.8.6 파싱 | `src/main_exam/json` | `JsonFileReadExample.java` |
+
+### 유형별 참고 예제
 
 | 시험 문제 키워드 | 들어갈 폴더 | 대표 파일 |
 | --- | --- | --- |
@@ -11,7 +26,7 @@
 | 파일 읽기, 파일 쓰기, 라인 파싱 | `src/exam/_01_file_read_write` | `FileReadWriteExample.java` |
 | 파일 변경 감지, polling | `src/exam/_01_file_read_write` | `FileMonitorExample.java` |
 | JSON 파일 읽기, Gson, POJO 변환 | `src/exam/_02_json_gson` | `GsonCastingExample.java` |
-| `HttpURLConnection`, GET, POST, polling | `src/exam/_03_http_urlconnection` | `MessageProducer.java`, `MessageConsumer.java` |
+| Jetty 9 HttpClient GET, POST, polling | `src/exam/_03_http_jetty_client` | `MessageProducer.java`, `MessageConsumer.java` |
 | Jetty HTTP 서버/클라이언트 | `src/exam/_04_http_jetty` | `HttpJettyExample.java` |
 | 비동기 HTTP 서버, 동시 요청 | `src/exam/_05_http_async_jetty` | `AsyncHttpServerExample.java` |
 | WebSocket 클라이언트 | `src/exam/_06_websocket_client` | `WebSocketClient.java` |
@@ -62,9 +77,9 @@ find src -name "*.java" ! -path "*/_06_websocket_client/*" -print | xargs javac 
 
 ```bash
 java -cp "bin:libs/*" exam._01_file_read_write.FileReadWriteExample
-java -cp "bin:libs/*" exam._02_json_gson.GsonCastingExample
+java -cp "bin:libs/*" main_exam.json.JsonFileReadExample
+java -cp "bin:libs/*" main_exam.http.HttpJsonScenarioExample
 java -cp "bin:libs/*" exam._16_bfs_dfs.BfsDfsExample
-java -cp "bin:libs/*" exam._04_http_jetty.HttpJettyExample
 ```
 
 Windows에서는 classpath 구분자를 `:` 대신 `;`로 바꿔주세요.
@@ -72,4 +87,6 @@ Windows에서는 classpath 구분자를 `:` 대신 `;`로 바꿔주세요.
 ## 보조 문서
 
 - [docs/EXAM_CHEATSHEET.md](docs/EXAM_CHEATSHEET.md): 시험장에서 복붙하기 좋은 짧은 코드 조각
+- [src/main_exam/http](src/main_exam/http): 핵심 HTTP 통신 예제
+- [src/main_exam/json](src/main_exam/json): 핵심 JSON/Gson 예제
 - [src/exam/README.md](src/exam/README.md): 전체 예제 폴더맵

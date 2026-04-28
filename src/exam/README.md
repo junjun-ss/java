@@ -7,7 +7,7 @@
 | 00 | `_00_fast_io` | 빠른 입력/출력, `StringTokenizer`, `StringBuilder` |
 | 01 | `_01_file_read_write` | 파일 읽기/쓰기, 라인 파싱, 파일 변경 감지 |
 | 02 | `_02_json_gson` | JSON 문자열/파일을 Gson으로 변환 |
-| 03 | `_03_http_urlconnection` | 표준 Java `HttpURLConnection` GET/POST |
+| 03 | `_03_http_jetty_client` | Jetty 9 `HttpClient` GET/POST/polling |
 | 04 | `_04_http_jetty` | Jetty HTTP 서버/클라이언트 |
 | 05 | `_05_http_async_jetty` | Jetty 비동기 HTTP 처리 |
 | 06 | `_06_websocket_client` | WebSocket client endpoint |

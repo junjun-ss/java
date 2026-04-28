@@ -1,8 +1,5 @@
 package exam._04_http_jetty;
 
-import java.util.List;
-import java.util.Scanner;
-
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;

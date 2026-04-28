@@ -1,7 +1,4 @@
 package exam._04_http_jetty;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;

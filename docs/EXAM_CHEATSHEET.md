@@ -2,6 +2,7 @@
 
 시험장에서 바로 복붙하기 좋은 짧은 패턴만 모았습니다.
 전체 실행 예제는 `src/exam/_번호_문제유형` 폴더 안의 `.java` 파일을 보면 됩니다.
+HTTP/JSON 핵심 예제는 `src/main_exam/http`, `src/main_exam/json`을 먼저 보세요.
 
 ## Fast IO
 
@@ -54,7 +55,9 @@ try (BufferedWriter bw = new BufferedWriter(new FileWriter("output.txt"))) {
 
 ## JSON / Gson
 
-폴더: `src/exam/_02_json_gson`
+폴더: `src/main_exam/json`
+
+사용 라이브러리: Google Gson `2.8.6`
 
 문자열을 POJO로 변환:
 
@@ -78,52 +81,56 @@ try (BufferedReader reader = new BufferedReader(new FileReader("person.json"))) 
 }
 ```
 
-## HTTP URLConnection
+## HTTP Jetty 9
 
-폴더: `src/exam/_03_http_urlconnection`
+폴더: `src/main_exam/http`
 
-기본 POST 요청:
+HTTP 통신은 Jetty 9 embedded server와 Jetty 9 `HttpClient` 기준으로 작성합니다.
 
-```java
-URL url = new URL("http://localhost:8080/queue");
-HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-conn.setRequestMethod("POST");
-conn.setDoOutput(true);
-conn.getOutputStream().write("Hello".getBytes(StandardCharsets.UTF_8));
-int responseCode = conn.getResponseCode();
-conn.disconnect();
-```
-
-기본 GET 요청:
+Jetty embedded server 시작:
 
 ```java
-URL url = new URL("http://localhost:8080/queue");
-HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-conn.setRequestMethod("GET");
-try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-    String body = in.lines().collect(Collectors.joining());
-}
-conn.disconnect();
+Server server = new Server(8080);
+server.setHandler(new AbstractHandler() {
+    @Override
+    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().println("{\"status\":\"ok\"}");
+        baseRequest.setHandled(true);
+    }
+});
+server.start();
 ```
 
-## Jetty HTTP
-
-폴더:
-
-```text
-src/exam/_04_http_jetty
-src/exam/_05_http_async_jetty
-```
-
-서버 handler 핵심:
+Jetty HttpClient GET:
 
 ```java
-public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-        throws IOException, ServletException {
-    response.setStatus(HttpServletResponse.SC_OK);
-    baseRequest.setHandled(true);
-    response.getWriter().println(request.getQueryString());
-}
+HttpClient client = new HttpClient();
+client.start();
+ContentResponse response = client.newRequest("http://localhost:8080/health")
+        .method("GET")
+        .timeout(3, TimeUnit.SECONDS)
+        .send();
+String body = response.getContentAsString();
+client.stop();
+```
+
+Jetty HttpClient JSON POST + Gson:
+
+```java
+Gson gson = new Gson();
+String jsonBody = gson.toJson(requestObject);
+
+ContentResponse response = client.newRequest("http://localhost:8080/echo")
+        .method("POST")
+        .header("Content-Type", "application/json;charset=UTF-8")
+        .content(new StringContentProvider(jsonBody))
+        .timeout(3, TimeUnit.SECONDS)
+        .send();
+
+ResponseObject result = gson.fromJson(response.getContentAsString(), ResponseObject.class);
 ```
 
 ## Thread / Async

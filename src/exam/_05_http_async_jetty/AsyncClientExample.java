@@ -1,11 +1,10 @@
 package exam._05_http_async_jetty;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.client.util.StringContentProvider;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -14,50 +13,44 @@ public class AsyncClientExample {
     private static final int NUM_REQUESTS = 100;
 
     public static void main(String[] args) throws Exception {
+        HttpClient httpClient = new HttpClient();
         ExecutorService executorService = Executors.newFixedThreadPool(NUM_REQUESTS);
         List<Future<String>> futures = new ArrayList<>();
 
-        for (int i = 0; i < NUM_REQUESTS; i++) {
-            Future<String> future = executorService.submit(() -> sendRequest());
-            futures.add(future);
-        }
+        try {
+            httpClient.start();
 
-        for (Future<String> future : futures) {
-            String response = future.get();
-            System.out.println("Received response: " + response);
-        }
+            for (int i = 0; i < NUM_REQUESTS; i++) {
+                Future<String> future = executorService.submit(() -> sendRequest(httpClient));
+                futures.add(future);
+            }
 
-        executorService.shutdown();
+            for (Future<String> future : futures) {
+                String response = future.get();
+                System.out.println("Received response: " + response);
+            }
+        } finally {
+            executorService.shutdown();
+            httpClient.stop();
+        }
     }
 
-    private static String sendRequest() throws IOException {
-        URL url = new URL("http://localhost:8080/id");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setDoOutput(true);
-
-        // Create a sample JSON payload
+    private static String sendRequest(HttpClient httpClient) throws Exception {
         Gson gson = new Gson();
         String payload = gson.toJson(new Person("John Doe", 30));
 
-        try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream())) {
-            writer.write(payload);
-            writer.flush();
+        ContentResponse response = httpClient.newRequest("http://localhost:8080/id")
+                .method("POST")
+                .timeout(5, TimeUnit.SECONDS)
+                .header("Content-Type", "application/json;charset=UTF-8")
+                .content(new StringContentProvider(payload))
+                .send();
+
+        if (response.getStatus() == 200) {
+            return response.getContentAsString();
         }
 
-        int responseCode = connection.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-                return response.toString();
-            }
-        } else {
-            throw new IOException("Request failed with response code: " + responseCode);
-        }
+        throw new IllegalStateException("Request failed with response code: " + response.getStatus());
     }
 
     private static class Person {
